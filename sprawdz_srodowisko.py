@@ -55,5 +55,4 @@ def srednia(liczby):
     suma = sum(liczby)
     return suma / len(liczby)
 if __name__ == "__main__":
-    print(srednia([]))
     sys.exit(main())
