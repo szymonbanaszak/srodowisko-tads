@@ -36,7 +36,7 @@ def zbierz_sprawdzenia():
 
 
 def main():
-    print(f"System: {platform.system()} {platform.release()}")
+    print(f"Platforma: {platform.system()} {platform.release()}")
     print(f"Interpreter: {sys.executable}")
     print("-" * 66)
     sprawdzenia = zbierz_sprawdzenia()
