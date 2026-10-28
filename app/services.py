@@ -1,5 +1,5 @@
 import csv
-
+_RAPORTY = []
 
 def wczytaj_zamowienia(sciezka):
     with open(sciezka, encoding="utf-8", newline="") as plik:
@@ -24,3 +24,11 @@ def policz_wskazniki(sciezka, region=None):
         "koszt": koszt,
         "marza": marza,
     }
+
+
+def zapisz_raport(rok, region):
+    _RAPORTY.append({"rok": rok, "region": region})
+
+
+def raporty_roku(rok):
+    return [r for r in _RAPORTY if r["rok"] == rok]
