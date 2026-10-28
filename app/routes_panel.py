@@ -1,6 +1,6 @@
-from flask import Blueprint, abort, current_app, request
+from flask import Blueprint, abort, current_app, redirect, request, url_for
 
-from .services import dostepne_regiony, policz_wskazniki, raporty_roku
+from .services import dostepne_regiony, policz_wskazniki, raporty_roku, zapisz_raport
 
 panel_bp = Blueprint("panel", __name__)
 
@@ -37,3 +37,22 @@ def region(kod):
 def raport(rok):
     n = len(raporty_roku(rok))
     return f"<h1>Raport {rok}</h1><p>Zapisane raporty: {n}</p>"
+
+
+@panel_bp.route("/raporty/nowy", methods=["GET", "POST"])
+def nowy_raport():
+    if request.method == "GET":
+        return "Wyślij formularz metodą POST z polami rok i region."
+    rok = request.form.get("rok", type=int)
+    region = request.form.get("region")
+    if rok is None or region not in dostepne_regiony(current_app.config["SCIEZKA_DANYCH"]):
+        abort(400, description="Niepoprawne dane formularza")
+    if not 2020 <= rok <= 2030:
+        abort(422, description="Rok poza zakresem 2020-2030")
+    zapisz_raport(rok, region)
+    return redirect(url_for("panel.raport", rok=rok), 303)
+
+
+@panel_bp.get("/stary-panel")
+def stary_panel():
+    return redirect(url_for("panel.kpi"), 301)
