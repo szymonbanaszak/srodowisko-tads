@@ -1,6 +1,6 @@
 from datetime import date
 
-from flask import Blueprint, abort, current_app, redirect, render_template, request, url_for
+from flask import Blueprint, abort, current_app, flash, redirect, render_template, request, url_for
 
 from .services import (
     dostepne_regiony,
@@ -48,8 +48,7 @@ def region(kod):
 @panel_bp.get("/raporty/", defaults={"rok": ROK_DOMYSLNY})
 @panel_bp.get("/raporty/<int(min=2020, max=2030):rok>")
 def raport(rok):
-    n = len(raporty_roku(rok))
-    return f"<h1>Raport {rok}</h1><p>Zapisane raporty: {n}</p>"
+    return render_template("report.html", rok=rok, zapisane=raporty_roku(rok))
 
 
 @panel_bp.route("/raporty/nowy", methods=["GET", "POST"])
@@ -63,6 +62,7 @@ def nowy_raport():
     if not 2020 <= rok <= 2030:
         abort(422, description="Rok poza zakresem 2020-2030")
     zapisz_raport(rok, region)
+    flash(f"Raport za rok {rok} został zapisany", "sukces")
     return redirect(url_for("panel.raport", rok=rok), 303)
 
 
