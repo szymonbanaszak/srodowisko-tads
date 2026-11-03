@@ -3,15 +3,16 @@
 {% block tytul %}Wskaźniki: {{ wskazniki.region or "wszystkie" }}{% endblock %}
 {% block tresc %}
 <h1>Wskaźniki: {{ wskazniki.region or "wszystkie" }}</h1>
+<p>Stan na dzień {{ dzisiaj | data_pl }}. Regiony w zbiorze: {{ regiony | length }} ({{ regiony | join(", ") }}).</p>
 <section class="kafelki">
 
-{{ kafelek("Przychód", wskazniki.przychod) }}
+{{ kafelek("Przychód", wskazniki.przychod | zl) }}
 
-{{ kafelek("Koszt", wskazniki.koszt) }}
+{{ kafelek("Koszt", wskazniki.koszt | zl) }}
 
-{{ kafelek("Marża", wskazniki.marza) }}
+{{ kafelek("Marża", wskazniki.marza | procent) }}
 
-{{ kafelek("Zamówienia", wskazniki.liczba_zamowien) }}
+{{ kafelek("Zamówienia", wskazniki.liczba_zamowien | liczba) }}
 </section>
 <table>
 
@@ -19,7 +20,7 @@
 
 {% for w in zestawienie %}
 
-<tr><td>{{ w.region }}</td><td>{{ w.przychod }}</td><td>{{ w.marza }}</td>
+<tr><td>{{ w.region }}</td><td>{{ w.przychod | zl }}</td><td>{{ w.marza | procent }}</td>
 
 <td>{{ ocena(w.marza) }}</td></tr>
 

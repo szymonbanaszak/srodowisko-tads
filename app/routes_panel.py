@@ -1,3 +1,5 @@
+from datetime import date
+
 from flask import Blueprint, abort, current_app, redirect, render_template, request, url_for
 
 from .services import (
@@ -26,7 +28,7 @@ def kpi():
     w = policz_wskazniki(sciezka, region)
     current_app.logger.info("Obliczono wskaźniki dla regionu %s", w["region"])
     return render_template(
-        "panel.html", wskazniki=w, zestawienie=zestawienie_regionow(sciezka)
+        "panel.html", wskazniki=w, zestawienie=zestawienie_regionow(sciezka), dzisiaj=date.today()
     )
 
 
@@ -39,6 +41,7 @@ def region(kod):
         "panel.html",
         wskazniki=policz_wskazniki(sciezka, kod),
         zestawienie=zestawienie_regionow(sciezka),
+        dzisiaj=date.today(),
     )
 
 
