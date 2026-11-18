@@ -28,8 +28,12 @@ def policz_wskazniki(sciezka, region=None, rok=None):
     }
 
 
-def zapisz_raport(rok, region):
-    _RAPORTY.append({"rok": rok, "region": region})
+def zapisz_raport(rok, region, uwagi=""):
+    _RAPORTY.append({"rok": rok, "region": region, "uwagi": uwagi})
+
+
+def wykaz_raportow():
+    return list(_RAPORTY)
 
 
 def raporty_roku(rok):
