@@ -10,10 +10,12 @@ def dostepne_regiony(sciezka):
     return sorted({z["region"] for z in wczytaj_zamowienia(sciezka)})
 
 
-def policz_wskazniki(sciezka, region=None):
+def policz_wskazniki(sciezka, region=None, rok=None):
     zamowienia = wczytaj_zamowienia(sciezka)
     if region is not None:
         zamowienia = [z for z in zamowienia if z["region"] == region]
+    if rok is not None:
+        zamowienia = [z for z in zamowienia if z["data"].startswith(str(rok))]
     przychod = round(sum(float(z["przychod"]) for z in zamowienia), 2)
     koszt = round(sum(float(z["koszt"]) for z in zamowienia), 2)
     marza = round((przychod - koszt) / przychod, 4) if przychod else 0.0
