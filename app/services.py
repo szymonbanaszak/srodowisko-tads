@@ -1,4 +1,5 @@
 import csv
+import io
 _RAPORTY = []
 
 def wczytaj_zamowienia(sciezka):
@@ -42,3 +43,15 @@ def raporty_roku(rok):
 
 def zestawienie_regionow(sciezka):
     return [policz_wskazniki(sciezka, kod) for kod in dostepne_regiony(sciezka)]
+
+
+WYMAGANE_KOLUMNY = {"data", "region", "przychod", "koszt"}
+
+
+def wczytaj_zbior(strumien):
+    tekst = strumien.read().decode("utf-8")
+    czytnik = csv.DictReader(io.StringIO(tekst))
+    brakujace = WYMAGANE_KOLUMNY - set(czytnik.fieldnames or [])
+    if brakujace:
+        raise ValueError("brak kolumn: " + ", ".join(sorted(brakujace)))
+    return sum(1 for _ in czytnik)
